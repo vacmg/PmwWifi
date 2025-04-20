@@ -1,3 +1,4 @@
 idf_component_register(SRCS "PMW-Wifi.cpp"
                     INCLUDE_DIRS "include"
-                    PRIV_REQUIRES esp_wifi esp_event nvs_flash EspOSInterface)
+                    REQUIRES esp_wifi EspOSInterface
+                    PRIV_REQUIRES esp_event nvs_flash)

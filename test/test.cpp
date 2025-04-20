@@ -3,4 +3,4 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-PMW_Wifi wifi;
+PMW_Wifi* wifi = PMW_Wifi::getInstance();

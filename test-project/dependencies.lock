@@ -1,0 +1,21 @@
+dependencies:
+  EspOSInterface:
+    component_hash: 1ce322558bb38021cb920b6e0a77be73abd16f49c8d249c8e882afebe73c8573
+    dependencies:
+    - name: idf
+      version: '>=5.4.0'
+    source:
+      git: git@github.com:vacmg/EspOSInterface.git
+      path: .
+      type: git
+    version: 2cfae921808543b88fbdce7c1b76c69fb8464c8c
+  idf:
+    source:
+      type: idf
+    version: 5.4.0
+direct_dependencies:
+- EspOSInterface
+- idf
+manifest_hash: dd982de05a11edaaef4bbd6419062b7a79d516e31b3d7801b9777167665f1016
+target: esp32
+version: 2.0.0
