@@ -1,0 +1,79 @@
+menu "PMW-Wifi Configuration"
+
+    config PMW_WIFI_CONNECTION_TIMEOUT_MS
+        int "WiFi connection timeout in ms"
+        default 30000
+        help
+            WiFi connection timeout in ms. Default is 30 seconds.
+            This is the time to wait for a connection to be established before giving up.
+
+    config PMW_WIFI_HOSTNAME
+        string "Hostname"
+        default "PMW-WiFi"
+        help
+            password identifier for SAE H2E
+
+    choice PMW_WIFI_SAE_MODE
+        prompt "WPA3 SAE mode selection"
+        default PMW_WIFI_WPA3_SAE_PWE_BOTH
+        help
+            Select mode for SAE as Hunt and Peck, H2E or both.
+        config PMW_WIFI_WPA3_SAE_PWE_HUNT_AND_PECK
+            bool "HUNT AND PECK"
+        config PMW_WIFI_WPA3_SAE_PWE_HASH_TO_ELEMENT
+            bool "H2E"
+        config PMW_WIFI_WPA3_SAE_PWE_BOTH
+            bool "BOTH"
+    endchoice
+
+    config PMW_WIFI_PW_ID
+        string "SAE H2E PASSWORD IDENTIFIER"
+        depends on  PMW_WIFI_WPA3_SAE_PWE_HASH_TO_ELEMENT|| PMW_WIFI_WPA3_SAE_PWE_BOTH
+        default ""
+        help
+            password identifier for SAE H2E
+
+    choice PMW_WIFI_SCAN_AUTH_MODE_THRESHOLD
+        prompt "WiFi Scan auth mode threshold"
+        default PMW_WIFI_AUTH_WPA2_PSK
+        help
+            The weakest authmode to accept in the scan mode.
+            This value defaults to PMW_WIFI_AUTH_WPA2_PSK incase password is present and PMW_WIFI_AUTH_OPEN is used.
+            Please select PMW_WIFI_AUTH_WEP/PMW_WIFI_AUTH_WPA_PSK incase AP is operating in WEP/WPA mode.
+
+        config PMW_WIFI_AUTH_OPEN
+            bool "OPEN"
+        config PMW_WIFI_AUTH_WEP
+            bool "WEP"
+        config PMW_WIFI_AUTH_WPA_PSK
+            bool "WPA PSK"
+        config PMW_WIFI_AUTH_WPA2_PSK
+            bool "WPA2 PSK"
+        config PMW_WIFI_AUTH_WPA_WPA2_PSK
+            bool "WPA/WPA2 PSK"
+        config PMW_WIFI_AUTH_WPA3_PSK
+            bool "WPA3 PSK"
+        config PMW_WIFI_AUTH_WPA2_WPA3_PSK
+            bool "WPA2/WPA3 PSK"
+        config PMW_WIFI_AUTH_WAPI_PSK
+            bool "WAPI PSK"
+    endchoice
+
+    config PMW_WIFI_PMF_CAPABLE
+        bool "Enable Wifi Protected Management Frame Support"
+        default y
+        help
+            Enable Wifi Protected Management Frame Support.
+            This is a security feature that helps to protect against certain types of attacks on Wi-Fi networks.
+
+    config PMW_WIFI_PMF_REQUIRED
+        bool "Require WiFi Protected Management Frame Support"
+        default n
+        depends on PMW_WIFI_PMF_CAPABLE
+        help
+            Require WiFi Protected Management Frame Support.
+            This option is only available if PMW_WIFI_PMF_CAPABLE is enabled.
+            If this option is enabled, the device will only connect to APs that support PMF.
+            If this option is disabled, the device will connect to APs that both support and do not support PMF.
+
+endmenu

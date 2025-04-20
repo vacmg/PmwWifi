@@ -1,0 +1,16 @@
+version: "1.0.0"
+description: "This component provides a wifi object that can scan and connect to wifi networks."
+url: "https://github.com/vacmg/PMW-Wifi"
+files:
+    exclude:
+        - ".github/*"
+        - "test-project/*"
+        - "test/*"
+        - ".clang-*"
+dependencies:
+    EspOSInterface:
+        git: git@github.com:vacmg/EspOSInterface.git
+        version: main
+
+    idf:
+        version: ">=5.4.0"

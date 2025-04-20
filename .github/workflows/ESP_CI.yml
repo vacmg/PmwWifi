@@ -1,0 +1,54 @@
+name: ESP_CI
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+    pull_request:
+        branches-ignore:
+            - '*Test*'
+    push:
+        branches:
+            - 'develop'
+            - 'main'
+
+jobs:
+    Build-Test:
+        runs-on: ubuntu-latest
+        env:
+            GH_PAT: ${{ secrets.PMW_CI_PAT }}
+            GHCR_PAT: ${{ secrets.PMW_GHCR_PAT }}
+            GH_USER_NAME: vacmg
+            IDF_DOCKER_IMAGE: ghcr.io/vacmg/pmw-esp-idf
+            IDF_DOCKER_TAG: v0.0.1
+
+        steps:
+            -   name: "Checkout repository"
+                uses: actions/checkout@v4
+
+            -   name: Cache Build Environment
+                id: CacheBuildEnvironment
+                uses: actions/cache@v4
+                with:
+                    key: "${{ runner.os }}-build-${{ hashFiles('**.cpp', '**.h', '**CMakeLists.txt') }}"
+                    path: 'test-project/build'
+
+            -   name: "Docker GitHub Container Registry Login"
+                run: echo $GHCR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+            
+            -   name: "ESP-IDF CI"
+                uses: espressif/esp-idf-ci-action@v1
+                with:
+                    esp_idf_docker_image: ${{ env.IDF_DOCKER_IMAGE }}
+                    esp_idf_version: ${{ env.IDF_DOCKER_TAG }}
+                    extra_docker_args: --env GH_PAT=$GH_PAT --env GH_USER_NAME=$GH_USER_NAME
+                    target: esp32
+                    path: 'test-project'
+                    command: |
+                        git config --global --replace-all "url.https://$GH_USER_NAME:$GH_PAT@github.com/.insteadOf" ssh://git@github.com: &&
+                        git config --global --add "url.https://$GH_USER_NAME:$GH_PAT@github.com/.insteadOf" git@github.com: &&
+                        git config --global --add "url.https://$GH_USER_NAME:$GH_PAT@github.com/.insteadOf" https://github.com/ &&
+                        
+                        idf.py build &&
+                        pytest
