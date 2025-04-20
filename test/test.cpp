@@ -3,4 +3,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-PMW_Wifi* wifi = PMW_Wifi::getInstance();
+TEST_CASE("getInstance", "[PMW-Wifi]")
+{
+    PMW_Wifi* wifi = PMW_Wifi::getInstance()
+    TEST_ASSERT_NOT_NULL(wifi);
+}
