@@ -5,6 +5,6 @@
 
 TEST_CASE("getInstance", "[PMW-Wifi]")
 {
-    PMW_Wifi* wifi = PMW_Wifi::getInstance()
+    PMW_Wifi* wifi = PMW_Wifi::getInstance();
     TEST_ASSERT_NOT_NULL(wifi);
 }
